@@ -26,14 +26,16 @@ jQuery(document).ready(function ($) {
         var price = $('#price-input').val();
         makeAjaxRequest(selectedValue, price);
     });
+    let debounceTimeout;
+    $('#price-input').on('input', e => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            var price = e.target.value;
+            $('#price-range').attr('value', price);
+            $('#price-range').css('width', ((price - 1000) / 5000) * 100 + '%');
 
-    $('#price-input').on('input', function () {
-        var price = $(this).val();
-
-        $('#price-range').attr('value', price);
-        $('#price-range').css('width', ((price - 1000) / 5000) * 100 + '%');
-
-        makeAjaxRequest($('#taxonomy-filter').val(), price);
+            makeAjaxRequest($('#taxonomy-filter').val(), price);
+        }, 300);
     });
 });
 
@@ -42,7 +44,4 @@ var selectedValue = document.getElementById('selected-value');
 priceInput.addEventListener('input', function () {
     selectedValue.textContent = priceInput.value;
 });
-
-
-
 

@@ -118,7 +118,6 @@ function my_custom_function()
 	$taxonomy_value = sanitize_text_field($_POST['taxonomy']);
 	$price = intval($_POST['price']);
 
-
 	$taxonomy_parts = explode('-', $taxonomy_value);
 
 	$first_part = $taxonomy_parts[0];
