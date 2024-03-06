@@ -1,6 +1,6 @@
 @import '../inc/vars';
 .cars {
-    padding: 50px;
+    padding: 50px 0;
     &__filter {
         padding: 30px 0;
         display: flex;
@@ -19,7 +19,7 @@
         }
         @include tablet-sm {
             grid-template-columns: 1fr;
-        }
+          gap: rem(20);}
     }
 }
 

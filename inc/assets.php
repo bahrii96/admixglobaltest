@@ -35,7 +35,7 @@ function detect_assets()
 			. '/assets/libs/jquery/jquery.min.js', '', '', true);
 
 		wp_enqueue_script('main-scripts', get_stylesheet_directory_uri()
-			. '/assets/js/main.js', '', '', true);
+			. '/assets/js/main.js', '', '', false);
 
 		// wp_enqueue_style('aos-styles', get_stylesheet_directory_uri() . '/assets/libs/aos/aos.css', array(), '1.0');
 
