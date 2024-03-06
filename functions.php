@@ -16,6 +16,10 @@ add_action('wp_footer', function () {
 	endif;
 });
 
+
+// blocks connect
+include 'inc/blocks/blocks-connect.php';
+
 /* Custom Theme Settings funcitons.php */
 
 if (!defined('ABSPATH')) {
@@ -25,16 +29,9 @@ if (!defined('ABSPATH')) {
 register_nav_menus(array(
 	'primary_left' => __('Primary Menu'),
 ));
-register_nav_menus(array(
-	'primary_footer' => __('Primary Footer First'),
-));
-register_nav_menus(array(
-	'primary_footer_second' => __('Primary Footer Second'),
-));
 
 
 add_theme_support('post-thumbnails');
-//add_image_size('large-preview', 550, 365, true);\
 
 
 function allow_svg_upload($mimes)
@@ -45,79 +42,152 @@ function allow_svg_upload($mimes)
 
 add_filter('upload_mimes', 'allow_svg_upload');
 
-// shortcodes connect
-// include 'inc/shortcodes.php';
-
-// theme custom settings
 include 'inc/settings.php';
 include 'inc/customizer-theme-settings.php';
 include 'inc/assets.php';
 include 'inc/disable-emojis.php';
 include 'inc/features.php';
 
+
+
 require_once get_stylesheet_directory() . '/inc/navigation.php';
 
 
-function toolset_fix_custom_posts_per_page($query_string)
+function create_custom_post_type()
 {
-	if (is_admin() || !is_array($query_string))
-		return $query_string;
-	$post_per_page = get_option('posts_per_page');
-	$post_types_to_fix = array(
+	register_post_type(
+		'cars',
 		array(
-			'post_type' => 'testimonial',
-			'posts_per_page' => 30
-		),
-		// add another if you want
-		/*
-      array(
-          'post_type' => 'movie',
-          'posts_per_page' => 2
-      ),
-      */
+			'labels' => array(
+				'name' => __('Cars'),
+				'singular_name' => __('Car')
+			),
+			'public' => true,
+			'has_archive' => true,
+			'supports' => array('title', 'editor', 'thumbnail', 'custom-fields'),
+		)
+	);
+}
+
+add_action('init', 'create_custom_post_type');
+
+function create_custom_taxonomies()
+{
+	register_taxonomy('brand', 'cars', array(
+		'hierarchical' => true,
+		'label' => 'Brand',
+		'query_var' => true,
+		'rewrite' => array('slug' => 'brand'),
+	));
+
+	register_taxonomy('car_type', 'cars', array(
+		'hierarchical' => true,
+		'label' => 'Car Type',
+		'query_var' => true,
+		'rewrite' => array('slug' => 'car-type'),
+	));
+
+	register_taxonomy('color', 'cars', array(
+		'hierarchical' => true,
+		'label' => 'Color',
+		'query_var' => true,
+		'rewrite' => array('slug' => 'color'),
+	));
+
+	register_taxonomy('year_of_manufacture', 'cars', array(
+		'hierarchical' => true,
+		'label' => 'Year of Manufacture',
+		'query_var' => true,
+		'rewrite' => array('slug' => 'year-of-manufacture'),
+	));
+}
+
+add_action('init', 'create_custom_taxonomies');
+
+
+function my_enqueue_scripts()
+{
+	wp_enqueue_script('custom-ajax', get_template_directory_uri() . '/assets/js/ajax-script.js', array('jquery'), '1.0', true);
+
+	wp_localize_script('custom-ajax', 'my_ajax_object', array('ajaxurl' => admin_url('admin-ajax.php')));
+}
+add_action('wp_enqueue_scripts', 'my_enqueue_scripts');
+
+function my_custom_function()
+{
+	$taxonomy_value = sanitize_text_field($_POST['taxonomy']);
+	$price = intval($_POST['price']);
+
+
+	$taxonomy_parts = explode('-', $taxonomy_value);
+
+	$first_part = $taxonomy_parts[0];
+	$second_part = $taxonomy_parts[1];
+
+	$args = array(
+		'post_type'      => 'cars',
+		'posts_per_page' => -1,
 	);
 
-	foreach ($post_types_to_fix as $fix) {
-		if (
-			array_key_exists('post_type', $query_string)
-			&& $query_string['post_type'] == $fix['post_type']
-		) {
-			$query_string['posts_per_page'] = $fix['posts_per_page'];
-			return $query_string;
-		}
+	if (!empty($price)) {
+		$args['meta_query'] = array(
+			array(
+				'key'     => 'price',
+				'value'   => $price,
+				'type'    => 'NUMERIC',
+				'compare' => '>=',
+			),
+		);
 	}
 
-	return $query_string;
-}
+	if (!empty($taxonomy_value)) {
+		$taxonomy = '';
 
-add_filter('request', 'toolset_fix_custom_posts_per_page');
-
-function add_paragraph_tags_to_acf_wysiwyg_content($value, $post_id, $field)
-{
-	if ($field['type'] === 'wysiwyg') {
-		$blocks = preg_split('/\n\s*\n/', $value);
-		$blocks = array_filter($blocks);
-		$formatted_content = '';
-		foreach ($blocks as $block) {
-			if (!preg_match('/^<p>/', $block)) {
-				$formatted_content .= '<p>' . $block . '</p>';
-			} else {
-				$formatted_content .= $block;
-			}
+		if (strpos($first_part, 'brand') !== false) {
+			$taxonomy = 'brand';
+		} elseif (strpos($first_part, 'car_type') !== false) {
+			$taxonomy = 'car_type';
+		} elseif (strpos($first_part, 'color') !== false) {
+			$taxonomy = 'color';
+		} elseif (strpos($first_part, 'year_of_manufacture') !== false) {
+			$taxonomy = 'year_of_manufacture';
 		}
-		return $formatted_content;
+
+		$args['tax_query'] = array(
+			array(
+				'taxonomy' => $taxonomy,
+				'field'    => 'slug',
+				'terms'    => $second_part,
+			),
+		);
 	}
+	global $post;
+	$query = new WP_Query($args);
+	if ($query->have_posts()) :
+		while ($query->have_posts()) : $query->the_post();
+			$prices = get_field('price', $post->ID);
+?>
+			<div class="car-item">
+				<?php
+				if (has_post_thumbnail()) {
+					the_post_thumbnail('medium');
+				}
+				?>
+				<div class="car-item__inf">
+					<h2><?php the_title(); ?></h2>
+					<h3><span>Price: </span><?php echo $prices ?></h3>
+				</div>
+			</div>
 
-	return $value;
+<?php
+		endwhile;
+		wp_reset_postdata();
+	else :
+		echo 'Empty.....';
+	endif;
+
+	wp_die();
 }
-add_filter('acf/format_value', 'add_paragraph_tags_to_acf_wysiwyg_content', 10, 3);
 
-
-function year_shortcode()
-{
-	$year = date_i18n('Y');
-	return $year;
-}
-add_shortcode('year', 'year_shortcode');
-
-
+add_action('wp_ajax_my_custom_action', 'my_custom_function');
+add_action('wp_ajax_nopriv_my_custom_action', 'my_custom_function');

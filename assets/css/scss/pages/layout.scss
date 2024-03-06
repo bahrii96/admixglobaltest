@@ -1,0 +1,191 @@
+@import '../inc/vars';
+
+.hidden {
+    display: none;
+}
+td {
+    padding: 8px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: rgb(0, 0, 0);
+		td {
+    padding: 8px 0;
+}
+    a {
+        color: rgb(0, 0, 0);
+        text-decoration-line: underline;
+        transition: all 0.3s;
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+    th {
+        font-weight: 500;
+    }
+    .circle {
+        border-radius: 24px;
+        backdrop-filter: blur(20px);
+
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &.red {
+            background: #db0202;
+        }
+        &.green {
+            background: rgb(78, 199, 87);
+        }
+        &.grey {
+            background: rgb(155, 155, 155);
+        }
+        &.white {
+            color: white;
+        }
+    }
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+}
+.main-table {
+    max-width: 994px;
+    &__expandable-row {
+        padding: 8px;
+        border-bottom: 1px solid rgb(60, 100, 123);
+        background: rgb(0, 82, 131);
+        color: rgb(255, 255, 255);
+        a {
+            color: rgb(255, 255, 255);
+        }
+        td:first-child {
+            padding-left: 8px;
+        }
+
+        td:last-child {
+            padding-right: 8px;
+        }
+    }
+
+    &__thead {
+        th {
+            background: rgb(245, 245, 245);
+            padding: 4px 0;
+        }
+        th:first-child {
+            padding-left: 8px;
+            border-radius: 2px 0px 0px 0px;
+        }
+        th:last-child {
+            padding-right: 8px;
+            border-radius: 0px 2px 0px 0px;
+        }
+        &-team {
+            width: 62%;
+        }
+        &-category {
+            width: 3.7%;
+        }
+    }
+
+    &__circle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .logo-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        img {
+            width: 24px;
+            height: 24px;
+        }
+        i {
+            margin-left: 36px;
+            font-size: 20px;
+            padding-top: 4px;
+        }
+    }
+    .expandable-row {
+        &__logo {
+            width: 62%;
+        }
+        &__numb {
+            width: 4%;
+        }
+
+        &__runs {
+            display: flex;
+            gap: 4px;
+            .grey {
+                color: rgb(68, 68, 68);
+            }
+        }
+        &.blue {
+            .circle:first-child {
+                position: relative;
+                &::after {
+                    position: absolute;
+                    content: '';
+                    width: 100%;
+                    height: 1.5px;
+                    background: rgb(255, 255, 255);
+                    bottom: -3px;
+                }
+            }
+        }
+        &.white {
+            border-bottom: 1px solid rgb(245, 245, 245);
+            background: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+            td {
+                color: rgb(0, 0, 0);
+                a {
+                    color: rgb(0, 0, 0);
+                }
+            }
+        }
+    }
+}
+.inner-table {
+    padding: 0;
+    &__thead {
+        th {
+            box-shadow: inset 0px 3px 1px 0px rgba(189, 191, 192, 0.25);
+            background: rgb(222, 236, 250);
+            padding: 4px 0;
+            width: 33.333%;
+        }
+
+        th:first-child {
+            padding-left: 8px;
+        }
+
+        th:last-child {
+            padding-right: 8px;
+        }
+    }
+    td {
+        background: rgb(245, 245, 245);
+    }
+    td:first-child {
+        padding-left: 8px;
+    }
+
+    td:last-child {
+        padding-right: 8px;
+    }
+    .logo-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        img {
+            width: 24px;
+            height: 24px;
+        }
+    }
+}
+
