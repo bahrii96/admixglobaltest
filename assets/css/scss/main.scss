@@ -12,8 +12,56 @@ body {
     line-height: 20px;
     letter-spacing: 0%;
     text-align: left;
+    background: #1f0222;
 }
+section {
+    padding: rem(80) 0;
+    #faq-list,
+    #faq-lists ,
+		#accordion{
+			margin-top: rem(20);
+        h3 {
+            cursor: pointer;
+            background: linear-gradient(60.46deg, rgb(154, 121, 50), rgb(227, 218, 149), rgb(243, 242, 188), rgb(153, 120, 50));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(rem(16), vw(24), rem(24));
+            font-weight: 300;
+            line-height: 1.37;
+            letter-spacing: 0%;
+            text-align: left;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(154, 161, 49);
+            padding: rem(10) 0;
+            span {
+                display: none;
+            }
+        }
+        .faq-answer {
+            div,
+            ul,
+            li,
+            p {
+                background: linear-gradient(60.46deg, rgb(154, 121, 50), rgb(227, 218, 149), rgb(243, 242, 188), rgb(153, 120, 50));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                padding: rem(10) 0;
+            }
+        }
 
+        .ui-state-active {
+            i {
+                &::before {
+                    content: '\f35b';
+                }
+            }
+        }
+    }
+}
 
 @import '_layout';
 @import 'ui/_button';

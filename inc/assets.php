@@ -8,16 +8,10 @@ function detect_assets()
 	if (!is_admin()) {
 		/* Connect styles for Any Templates If needed */
 
-		if (is_page_template('views/layout.php')) {
-			wp_enqueue_style('layout', get_stylesheet_directory_uri()
-				. '/assets/css/pages/layout.css', array(), null);
-		}
-		if (is_page_template('views/success.php')) {
-			wp_enqueue_style('success', get_stylesheet_directory_uri()
-				. '/assets/css/pages/success.css', array(), null);
-		}
-
-
+		// if (is_page_template('views/layout.php')) {
+		// 	wp_enqueue_style('layout', get_stylesheet_directory_uri()
+		// 		. '/assets/css/pages/layout.css', array(), null);
+		// }
 
 		/* Connect main style */
 
@@ -71,7 +65,7 @@ function detect_assets()
 		// );
 		// wp_enqueue_style('fancybox');
 
-		// wp_enqueue_script('jquery-ui-scripts', get_stylesheet_directory_uri() . '/assets/libs/jquery-ui/jquery-ui.min.js', array('jquery'), '1.0', true);
+		wp_enqueue_script('jquery-ui-scripts', get_stylesheet_directory_uri() . '/assets/libs/jquery-ui/jquery-ui.min.js', array('jquery'), '1.0', );
 	}
 }
 add_action('wp_enqueue_scripts', 'detect_assets');

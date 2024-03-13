@@ -1,0 +1,36 @@
+.btn {
+    box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.25), -1px 1px 2px 0px rgba(0, 0, 0, 0.25);
+    background: linear-gradient(60.46deg, rgb(154, 121, 50), rgb(227, 218, 149), rgb(243, 242, 188), rgb(153, 120, 50));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Mak';
+    font-size: clamp(rem(12), vw(18), rem(18));
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: left;
+    text-transform: uppercase;
+    border: rem(1.5) solid #ebe6a9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: rem(186);
+    height: rem(186);
+    border-radius: 50%;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    // transition: 'background' 0.2s;
+    @include tablet-sm {
+        width: rem(120);
+        height: rem(120);
+    }
+    &:hover {
+        opacity: 1;
+        color: rgb(31, 2, 34);
+        -webkit-background-clip: unset;
+        -webkit-text-fill-color: unset;
+        background-clip: unset;
+        border: none;
+    }
+}
